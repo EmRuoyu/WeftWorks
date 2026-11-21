@@ -8,7 +8,7 @@
 python3 -m http.server 8000 --directory public
 ```
 
-打开 http://localhost:8000/。这是本机地址，不能直接发给客户。请通过 HTTP 服务器浏览，根路径资源不支持直接双击 HTML 使用 `file://` 浏览。
+打开 [本地首页](http://localhost:8000/)。这是本机地址，不能直接发给客户。请通过 HTTP 服务器浏览，根路径资源不支持直接双击 HTML 使用 `file://` 浏览。
 
 | 页面 | 中文 | English |
 | --- | --- | --- |
