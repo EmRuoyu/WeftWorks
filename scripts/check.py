@@ -39,9 +39,13 @@ for path,page in pages.items():
         if url.fragment: assert url.fragment in pages[target.resolve()].ids,(path,ref,'Missing anchor')
     html=path.read_text()
     config=json.loads((ROOT/'site.config.json').read_text())
-    if not config['contact_email'] or not config['contact_email_verified']: assert 'mailto:' not in html,path
+    if not config['contact_email'] or not config['contact_email_enabled']: assert 'mailto:' not in html,path
     if 'about' in path.parts:
-        assert 'tel:+8618901647505' in html and '18901647505' in html,path
+        assert 'tel:' not in html,path
+        assert 'mailto:'+config['contact_email'] in html,path
+        assert config['contact_wechat'] in html,path
+        if config['contact_wechat_status'] == 'planned':
+            assert ('待开通' if page.lang=='zh-CN' else 'Planned') in html,path
         assert 'Forward Deployed Engineer' in html,path
         assert ('/about/' if page.lang=='zh-CN' else '/zh/about/') in page.refs,path
     if 'cases' in path.parts:
@@ -55,4 +59,4 @@ for prefix in ['', 'zh/', 'en/']:
     home = pages[(PUBLIC/prefix/'index.html').resolve()]
     assert ('/zh/about/' if prefix=='zh/' else '/about/') in home.refs
     assert ('/zh/cases/shengxuerong/' if prefix=='zh/' else '/cases/shengxuerong/') in home.refs
-print('PASS: English default, About routes, language counterparts, public phone, and FDE content.')
+print('PASS: English default, About routes, language counterparts, email, proposed WeChat status, and FDE content.')

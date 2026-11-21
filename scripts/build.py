@@ -8,9 +8,9 @@ import hashlib
 ROOT = Path(__file__).resolve().parents[1]
 PUBLIC = ROOT / 'public'
 CONFIG = json.loads((ROOT / 'site.config.json').read_text())
-EMAIL = CONFIG.get('contact_email', '') if CONFIG.get('contact_email_verified') is True else ''
+EMAIL = CONFIG.get('contact_email', '') if CONFIG.get('contact_email_enabled') is True else ''
 if EMAIL and (EMAIL.count('@') != 1 or any(c.isspace() for c in EMAIL) or any(c in EMAIL for c in '<>\"?&')):
-    raise ValueError('Provide a valid verified contact email, or leave it empty.')
+    raise ValueError('Provide a valid contact email, or leave it empty.')
 
 def write(path, text):
     p = PUBLIC / path
@@ -61,7 +61,7 @@ COPY['en'].update({
     'aboutPath':'/about/', 'aboutPageTitle':'About WeftWorks', 'menu':'Menu',
     'aboutH1':'Close to the work.<br><span>Close to your team.</span>',
     'aboutLead':'We are an independent AI engineering studio for apparel businesses. We work with the people who know the process, then build tools that fit it.',
-    'aboutMore':'Meet the studio', 'phoneLabel':'Phone', 'contactTitle':'Let’s start with your workflow.',
+    'aboutMore':'Meet the studio', 'emailLabel':'Email', 'wechatLabel':'WeChat', 'wechatPending':'Planned · Please email us for now', 'contactTitle':'Let’s start with your workflow.',
     'contactText':'Bring a spreadsheet, a style brief, or a task that takes too much time. We can start there.',
     'conversation':'A direct conversation', 'principleTitle':'The people doing the work shape the tool.',
     'principles':[
@@ -80,7 +80,7 @@ COPY['zh'].update({
     'aboutPath':'/zh/about/', 'aboutPageTitle':'关于 WeftWorks', 'menu':'菜单',
     'aboutH1':'走近业务，<br><span>和你们一起做。</span>',
     'aboutLead':'我们是一家面向服装企业的独立 AI 工程工作室。与最了解流程的人一起工作，把工具做进真实的业务里。',
-    'aboutMore':'进一步了解我们', 'phoneLabel':'联系电话', 'contactTitle':'从你手头的流程聊起。',
+    'aboutMore':'进一步了解我们', 'emailLabel':'电子邮箱', 'wechatLabel':'微信', 'wechatPending':'待开通 · 请先通过邮箱联系', 'contactTitle':'从你手头的流程聊起。',
     'contactText':'带上一张表、一份款式说明，或者一项总是很费时间的工作。我们就从这里开始。',
     'conversation':'直接和做开发的人聊', 'principleTitle':'每天做这项工作的人，决定工具该怎么做。',
     'principles':[
@@ -95,10 +95,8 @@ COPY['zh'].update({
         ('一起接入与改进','确定需要接入的系统，留下清楚的流程说明，再随着实际使用继续完善。')],
     'deliverables':['一份共同确认的款式说明','一份核对后的上架草稿','一张更清楚的库存表','一份对齐差额的交班单']
 })
-PHONE = CONFIG.get('contact_phone', '18901647505')
-PHONE_URI = CONFIG.get('contact_phone_uri', '+8618901647505')
-if not PHONE.isdigit() or not PHONE_URI.lstrip('+').isdigit():
-    raise ValueError('Phone must contain digits; its URI may start with +.')
+WECHAT = CONFIG.get('contact_wechat', '')
+WECHAT_PLANNED = CONFIG.get('contact_wechat_status') != 'active'
 
 def image(name, alt, lazy=True):
     return f'<img src="/assets/knit-{name}.svg" width="400" height="340" alt="{escape(alt)}"{(" loading=\"lazy\"" if lazy else " fetchpriority=\"high\"")} decoding="async">'
@@ -152,10 +150,12 @@ for locale,c in COPY.items():
     localized_write(locale,'cases/shengxuerong/index.html',shell(c,'case',main))
     principles = ''.join(f'<article class="about-principle"><h3>{title}</h3><p>{text}</p></article>' for title,text in c['principles'])
     fde_steps = ''.join(f'<article class="fde-step"><span class="thread-line" aria-hidden="true"></span><h3>{title}</h3><p>{text}</p></article>' for title,text in c['fdeSteps'])
+    email_method = f'<div class="contact-method"><span>{c["emailLabel"]}</span><a class="contact-value" href="mailto:{escape(EMAIL)}">{escape(EMAIL)}</a></div>' if EMAIL else ''
+    wechat_method = f'<div class="contact-method"><span>{c["wechatLabel"]}</span><p class="contact-value wechat-id">{escape(WECHAT)}</p>' + (f'<small>{c["wechatPending"]}</small>' if WECHAT_PLANNED else '') + '</div>' if WECHAT else ''
     about_body = f'''<main id="main" class="about-page"><section class="about-hero container"><div><p class="eyebrow">{c['aboutPageTitle']}</p><h1>{c['aboutH1']}</h1><p class="about-lead">{c['aboutLead']}</p></div><div class="about-thread" aria-hidden="true"><div class="thread-art"></div><span>WEFT / WORKS</span></div></section>
 <section class="studio-story container"><div><p class="eyebrow">Weft / {'纬线' if locale=='zh' else 'The crosswise thread'}</p><h2>{c['aboutTitle']}</h2></div><p class="large-copy">{c['aboutText']}</p></section>
 <section class="about-principles container"><h2>{c['principleTitle']}</h2><div>{principles}</div></section>
-<section class="container" id="contact"><div class="contact-panel about-panel"><div><p class="eyebrow">{c['conversation']}</p><h2>{c['contactTitle']}</h2><p>{c['contactText']}</p></div><div class="phone-block"><span>{c['phoneLabel']}</span><a class="phone-number" href="tel:{escape(PHONE_URI)}">{escape(PHONE)}</a></div></div></section>
+<section class="container" id="contact"><div class="contact-panel about-panel"><div><p class="eyebrow">{c['conversation']}</p><h2>{c['contactTitle']}</h2><p>{c['contactText']}</p></div><div class="contact-methods">{email_method}{wechat_method}</div></div></section>
 <section id="fde" class="fde-section"><div class="container"><div class="fde-heading"><div><p class="eyebrow">{c['fdeLabel']}</p><h2>{c['fdeTitle']}</h2></div><p>{c['fdeText']}</p></div><div class="fde-steps">{fde_steps}</div></div></section></main>'''
     localized_write(locale, 'about/index.html', shell(c, 'about', about_body))
     err=f'<main id="main" class="container error"><p class="eyebrow">404</p><h1>{c["notfound"]}</h1><p>{c["notfoundText"]}</p><a class="button" href="{c["home"]}">{c["homeLink"]}</a></main>'

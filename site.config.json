@@ -1,6 +1,6 @@
 {
-  "contact_email": "",
-  "contact_email_verified": false,
-  "contact_phone": "18901647505",
-  "contact_phone_uri": "+8618901647505"
+  "contact_email": "lessthan3@qq.com",
+  "contact_email_enabled": true,
+  "contact_wechat": "WeftWorks_AI",
+  "contact_wechat_status": "planned"
 }
