@@ -40,9 +40,9 @@ python3 scripts/check.py
 
 ## 联系资料
 
-About 页面使用委托方提供的邮箱 `lessthan3@qq.com`，点击即可打开邮件草稿；页脚也显示邮箱入口。微信号暂拟为 `WeftWorks_AI`，未确认注册，页面明确标注“待开通”，暂时引导访客通过邮箱联系。
+About 页面使用委托方提供的邮箱 `lessthan3@qq.com`，点击即可打开邮件草稿；页脚也显示邮箱入口。微信号为 `WeftWorks_AI`，已由委托方确认开通，页面作为正式联系方式展示。
 
-在 `site.config.json` 中设置 `contact_email` 与 `contact_email_enabled` 来更新邮件入口。`contact_wechat` 为拟用微信号，`contact_wechat_status` 当前是 `planned`；只有确认账号已注册且由工作室控制后，才改为 `active`。修改后运行生成器并提交输出。页面不再展示电话。
+在 `site.config.json` 中设置 `contact_email` 与 `contact_email_enabled` 来更新邮件入口。`contact_wechat` 为微信号，`contact_wechat_status` 当前是 `active`。修改后运行生成器并提交输出。页面不再展示电话。
 
 ## GitHub 与 Cloudflare Pages
 
@@ -74,7 +74,7 @@ Cloudflare 使用根目录 `404.html` 返回错误状态；英文专用错误页
 - 从首页进入案例、返回服务区、切换语言、刷新案例直链。
 - 案例复制按钮显示成功反馈；若浏览器拒绝剪贴板权限，应提示从地址栏复制。
 - 各页面包含一个 H1、独立标题和摘要、正确的语言属性；Tab 焦点可见。
-- 邮箱链接指向配置的地址；拟用微信号保留“待开通”说明；图注与“方案示意”保留。
+- 邮箱链接指向配置的地址；微信号与已确认开通的账号一致；图注与“方案示意”保留。
 - 部署后用未登录窗口及手机打开两种语言的首页、About 和案例路径，并从目标客户常用网络检查图片。此项不能用本地预览替代。
 
 ## 内容边界
