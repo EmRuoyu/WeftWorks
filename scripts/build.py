@@ -3,6 +3,7 @@
 from pathlib import Path
 from html import escape
 import json
+import hashlib
 
 ROOT = Path(__file__).resolve().parents[1]
 PUBLIC = ROOT / 'public'
@@ -39,14 +40,14 @@ write('assets/share-cover.svg','<svg xmlns="http://www.w3.org/2000/svg" width="1
 
 COPY = {
 'zh': {
-'lang':'zh-CN','home':'/','case':'/cases/shengxuerong/','services':'服务','cases':'案例','approach':'合作方式','about':'关于我们','skip':'跳到正文','other':'English','otherlang':'en','studio':'独立 AI 工程工作室','title':'给服装企业做合用的 AI 工具','heading':'给服装企业做<br>合用的 <span>AI 工具</span>','intro':'我们是 WeftWorks，一家独立的 AI 工程工作室。我们跟设计师一起对款，跟运营核库存，也到门店看一天的账怎么收。先弄清哪一步最费手，再按你们现有的做法搭工具。','cta':'看款式预览案例','secondary':'了解我们做什么','board':'款式预览示意','base':'基础款 · 雾绿','oat':'燕麦色','navy':'藏青色','keep':'同一版型，两种配色','note':'原创款式示意，非客户样衣','serviceTitle':'哪些工作可以交给工具','serviceIntro':'从日常业务里，找到值得先做的一步。','servicesData':[
+'lang':'zh-CN','home':'/zh/','case':'/zh/cases/shengxuerong/','services':'服务','cases':'案例','approach':'合作方式','about':'关于我们','skip':'跳到正文','other':'English','otherlang':'en','studio':'独立 AI 工程工作室','title':'给服装企业做合用的 AI 工具','heading':'给服装企业做<br>合用的 <span>AI 工具</span>','intro':'我们是 WeftWorks，一家独立的 AI 工程工作室。我们跟设计师一起对款，跟运营核库存，也到门店看一天的账怎么收。先弄清哪一步最费手，再按你们现有的做法搭工具。','cta':'看款式预览案例','secondary':'了解我们做什么','board':'款式预览示意','base':'基础款 · 雾绿','oat':'燕麦色','navy':'藏青色','keep':'同一版型，两种配色','note':'原创款式示意，非客户样衣','serviceTitle':'哪些工作可以交给工具','serviceIntro':'从日常业务里，找到值得先做的一步。','servicesData':[
 ('设计与打样','买家想换个领口，怎么先对方向？','把参考图和修改要求放在同一份款式说明里。先看预览，设计师确认方向后再决定要不要打样。'),
 ('电商上新','同一款衣服，上架时要填几遍？','从款式资料整理商品标题、颜色和尺码，生成上架草稿。运营核对后再发布。'),
 ('库存跟踪','哪个颜色断码了，表里能看出来吗？','把现有库存表按款号、颜色和尺码对齐，标出缺码和账实不符的项目，方便仓管逐项核对。'),
 ('门店打烊','收店时，哪笔账还没对上？','按门店整理销售、退款和交接记录。值班同事只需逐项检查差额，再确认当天的交班单。')],
 'example':'业务场景示例','caseTitle':'圣雪绒的款式预览方案','caseIntro':'外贸客户想看同一款衣服换色后的样子。我们以这个需求为例，画出从修改意见到两张候选图的流程。','caseLink':'查看方案示意','badge':'外贸服装 · 方案示意','approachTitle':'从你们手头的<br>一项工作开始','approachText':'先挑一笔真实业务，从头跟一遍。接着，用一份样表或一组款图搭出小版本。让每天做这项工作的人试用，再一起决定哪些步骤接入现有系统，哪些需要保留人工确认。','phases':['跟一笔业务','搭一个小版本','让使用者试用'],'aboutTitle':'织进业务里的工程服务','aboutText':'Weft 是织物的纬线。我们从服装业务出发，为传统企业提供驻场式 AI 工程服务。你可以直接和做开发的人讨论需求，从一张表、一款衣服或一家门店开始。','footer':'从一款衣服、一张表、一项工作开始。','contact':'聊聊你的流程','back':'首页 / 案例','caseH1':'圣雪绒｜把买家的改色意见变成款式预览','caseLead':'我们为圣雪绒规划了一套款式预览流程。下面用一件示例针织衫，说明业务员收到修改意见后，如何和设计师一起确认下一版。','copy':'复制本页链接','copied':'链接已复制','copyFail':'请从浏览器地址栏复制本页链接。','step1':'接需求','step1text':'业务员选底稿，附上买家原话。','messageLabel':'示例买家留言','quote':'“领口和纹路照旧。想看看燕麦色和藏青色，下次对款时一起比较。”','step2':'拆要求','step2text':'Agent 提取要改和要保留的部分；信息不足时列出待问项。','sheet':'款式修改单','change':'修改','changeText':'颜色：燕麦色、藏青色','preserve':'保留','preserveText':'领口、针织纹路与版型','pending':'待确认','pendingText':'两种配色的确切色号','step3':'做预览','step3text':'按修改单，为同一版型准备两个候选配色，供下一次对款时比较。','a':'候选方案 A','b':'候选方案 B','step4':'人工复核','step4text':'设计师核对版型和纹路，业务员补齐色号，再决定发哪版。','designer':'设计师','designerText':'核对领口、版型与针织纹路。','sales':'业务员','salesText':'补齐确切色号，确认要发送的候选方案。','caution':'待确认：色号与最终方案。实物颜色以色卡或样衣为准。','boundary':'本页展示拟议流程和预先制作的示意图，不代表已上线系统或实际客户样衣。','returnServices':'了解其他业务场景','notfound':'这个页面还没有织好','notfoundText':'链接可能已更改。回到首页，从一项具体的工作开始。','homeLink':'返回首页'},
 'en': {
-'lang':'en','home':'/en/','case':'/en/cases/shengxuerong/','services':'Services','cases':'Case study','approach':'Our approach','about':'About','skip':'Skip to content','other':'中文','otherlang':'zh-CN','studio':'Independent AI engineering studio','title':'Practical AI tools for apparel businesses','heading':'AI tools that fit<br>the way you <span>work.</span>','intro':'We are WeftWorks, an independent AI engineering studio. We review styles with designers, reconcile inventory with operations teams, and spend time in stores to understand the daily close. We find the most time-consuming step, then build tools around the way you already work.','cta':'Explore the style preview','secondary':'See what we do','board':'Style preview concept','base':'Base style · Sage','oat':'Oatmeal','navy':'Navy','keep':'One silhouette. Two colorways.','note':'Original illustration, not a client sample','serviceTitle':'Where tools can lend a hand','serviceIntro':'Start with a step in your everyday work.','servicesData':[
+'lang':'en','home':'/','case':'/cases/shengxuerong/','services':'Services','cases':'Case study','approach':'Our approach','about':'About','skip':'Skip to content','other':'中文','otherlang':'zh-CN','studio':'Independent AI engineering studio','title':'Practical AI tools for apparel businesses','heading':'AI tools that fit<br>the way you <span>work.</span>','intro':'We are WeftWorks, an independent AI engineering studio. We review styles with designers, reconcile inventory with operations teams, and spend time in stores to understand the daily close. We find the most time-consuming step, then build tools around the way you already work.','cta':'Explore the style preview','secondary':'See what we do','board':'Style preview concept','base':'Base style · Sage','oat':'Oatmeal','navy':'Navy','keep':'One silhouette. Two colorways.','note':'Original illustration, not a client sample','serviceTitle':'Where tools can lend a hand','serviceIntro':'Start with a step in your everyday work.','servicesData':[
 ('Design & sampling','A new neckline. How do you agree on a direction?','Bring reference images and change requests into one style brief. Review a preview first, then let the designer decide whether to make a sample.'),
 ('Product listings','How often do you enter the same product details?','Turn style information into draft titles, colors, and sizes for a product listing. The operations team checks the details before publishing.'),
 ('Inventory tracking','Can your spreadsheet show which sizes are missing?','Align existing inventory sheets by style, color, and size. Flag missing sizes and stock discrepancies for the warehouse team to check.'),
@@ -54,30 +55,93 @@ COPY = {
 'example':'Illustrative business scenarios','caseTitle':'A style preview workflow for Shengxuerong','caseIntro':'An overseas buyer wants to see the same garment in different colors. We use this request to illustrate a workflow from change notes to two candidate previews.','caseLink':'Explore the proposed workflow','badge':'Apparel export · Proposed workflow','approachTitle':'Start with one task<br>on your desk.','approachText':'We follow one real piece of work from start to finish. Then we build a small version using a sample spreadsheet or a set of style images. The people who do the work try it, and together we decide what to connect to existing systems and where human review should stay.','phases':['Follow the work','Build a small version','Try it with the team'],'aboutTitle':'Engineering woven into your work','aboutText':'Weft is the crosswise thread in woven fabric. Starting with apparel workflows, we provide hands-on AI engineering for traditional businesses. You work directly with the developers, beginning with one spreadsheet, one garment, or one store.','footer':'One garment. One spreadsheet. One place to start.','contact':'Tell us about your workflow','back':'Home / Case study','caseH1':'Shengxuerong | From a buyer’s color request to a style preview','caseLead':'We have planned a style preview workflow for Shengxuerong. Using an illustrative sweater, we show how a sales representative and a designer could review the next version after receiving a buyer’s change request.','copy':'Copy page link','copied':'Link copied','copyFail':'Please copy this page’s link from your browser’s address bar.','step1':'Receive the request','step1text':'The sales representative selects the base style and attaches the buyer’s original message.','messageLabel':'Illustrative buyer message','quote':'“Keep the neckline and knit pattern as they are. Could we see oatmeal and navy so we can compare them at our next style review?”','step2':'Clarify the changes','step2text':'The agent identifies what to change and what to preserve, then lists questions where information is missing.','sheet':'Style change sheet','change':'Change','changeText':'Color: oatmeal and navy','preserve':'Preserve','preserveText':'Neckline, knit pattern, and silhouette','pending':'To confirm','pendingText':'Exact color codes for both options','step3':'Prepare the previews','step3text':'Following the change sheet, prepare two color options in the same silhouette for the next review.','a':'Candidate A','b':'Candidate B','step4':'Review with the team','step4text':'The designer checks the silhouette and knit pattern. The sales representative confirms the color codes before deciding which version to send.','designer':'Designer','designerText':'Check the neckline, silhouette, and knit pattern.','sales':'Sales representative','salesText':'Confirm the exact color codes and the candidate to send.','caution':'Still to confirm: color codes and the final option. Refer to a physical color card or sample for the actual color.','boundary':'This page shows a proposed workflow and prepared illustrations. It does not represent a deployed system or actual client samples.','returnServices':'Explore other business scenarios','notfound':'This thread leads to a missing page','notfoundText':'The link may have changed. Return home and start with a task you know.','homeLink':'Back to home'}
 }
 
+
+# English is the default; explicit Chinese routes keep shared links predictable.
+COPY['en'].update({
+    'aboutPath':'/about/', 'aboutPageTitle':'About WeftWorks', 'menu':'Menu',
+    'aboutH1':'Close to the work.<br><span>Close to your team.</span>',
+    'aboutLead':'We are an independent AI engineering studio for apparel businesses. We work with the people who know the process, then build tools that fit it.',
+    'aboutMore':'Meet the studio', 'phoneLabel':'Phone', 'contactTitle':'Let’s start with your workflow.',
+    'contactText':'Bring a spreadsheet, a style brief, or a task that takes too much time. We can start there.',
+    'conversation':'A direct conversation', 'principleTitle':'The people doing the work shape the tool.',
+    'principles':[
+        ('Work with the builders','Talk directly with the engineers who design and develop your tools. The same conversation carries through from the first question to the working version.'),
+        ('Start with what is already there','A spreadsheet, a set of style images, or a store handover can be the starting point. We build around the systems and habits your team already uses.'),
+        ('Keep judgment with your team','Designers review style changes. Operations teams check product details. We agree together where automation helps and where a person should make the decision.')],
+    'fdeLabel':'Our approach to working together', 'fdeTitle':'Forward Deployed Engineering',
+    'fdeText':'An FDE — Forward Deployed Engineer — works closely with a customer’s team to understand the work and build solutions in context. We bring that approach to apparel: spend time with your people, build a small working version, and refine it together in daily use.',
+    'fdeSteps':[
+        ('Understand the work','Follow a real task with your team. Map the inputs, handoffs, and decisions that matter.'),
+        ('Build alongside you','Turn one concrete need into a small tool. Review it with the people who will use it.'),
+        ('Connect and refine','Decide what to integrate, document the workflow, and improve it as the team puts it to work.')],
+    'deliverables':['A shared style brief','A checked listing draft','A clearer inventory sheet','A reconciled handover']
+})
+COPY['zh'].update({
+    'aboutPath':'/zh/about/', 'aboutPageTitle':'关于 WeftWorks', 'menu':'菜单',
+    'aboutH1':'走近业务，<br><span>和你们一起做。</span>',
+    'aboutLead':'我们是一家面向服装企业的独立 AI 工程工作室。与最了解流程的人一起工作，把工具做进真实的业务里。',
+    'aboutMore':'进一步了解我们', 'phoneLabel':'联系电话', 'contactTitle':'从你手头的流程聊起。',
+    'contactText':'带上一张表、一份款式说明，或者一项总是很费时间的工作。我们就从这里开始。',
+    'conversation':'直接和做开发的人聊', 'principleTitle':'每天做这项工作的人，决定工具该怎么做。',
+    'principles':[
+        ('直接和工程师合作','从第一次讨论需求到试用小版本，你都可以直接和设计、开发工具的人交流，让业务背景贯穿整个开发过程。'),
+        ('从现有资料和做法开始','一张库存表、一组款图或一份门店交班单，都可以成为起点。我们围绕你们现有的系统与工作习惯搭建工具。'),
+        ('把判断留给业务团队','设计师确认款式方向，运营核对商品资料。哪些环节适合自动化，哪些需要人工判断，我们和使用者一起确定。')],
+    'fdeLabel':'我们的合作思路', 'fdeTitle':'FDE：把工程师带到业务现场',
+    'fdeText':'FDE 是 Forward Deployed Engineer，即前线部署工程师。它强调工程师深入客户团队，理解具体流程，并在真实业务中开发解决方案。我们把这种合作方式带进服装业务：跟着使用者看流程，做出小版本，再在日常使用中一起改进。',
+    'fdeSteps':[
+        ('一起理解业务','跟完一笔真实工作，弄清资料从哪里来、交给谁，以及哪些判断最关键。'),
+        ('一起做出工具','围绕一个具体需求做出小版本，让每天使用它的人参与试用与调整。'),
+        ('一起接入与改进','确定需要接入的系统，留下清楚的流程说明，再随着实际使用继续完善。')],
+    'deliverables':['一份共同确认的款式说明','一份核对后的上架草稿','一张更清楚的库存表','一份对齐差额的交班单']
+})
+PHONE = CONFIG.get('contact_phone', '18901647505')
+PHONE_URI = CONFIG.get('contact_phone_uri', '+8618901647505')
+if not PHONE.isdigit() or not PHONE_URI.lstrip('+').isdigit():
+    raise ValueError('Phone must contain digits; its URI may start with +.')
+
 def image(name, alt, lazy=True):
     return f'<img src="/assets/knit-{name}.svg" width="400" height="340" alt="{escape(alt)}"{(" loading=\"lazy\"" if lazy else " fetchpriority=\"high\"")} decoding="async">'
 
 def shell(c, kind, body):
     zh = c['lang']=='zh-CN'
     home, case = c['home'], c['case']
-    other = ('/en/cases/shengxuerong/' if zh else '/cases/shengxuerong/') if kind=='case' else ('/en/' if zh else '/')
-    title = c['caseH1'] if kind=='case' else c['title']
-    desc = c['caseLead'] if kind=='case' else c['intro']
+    alternate = COPY['en' if zh else 'zh']
+    route_key = {'home':'home', 'case':'case', 'about':'aboutPath'}.get(kind, 'home')
+    other = alternate[route_key]
+    title = c['caseH1'] if kind=='case' else c['aboutPageTitle'] if kind=='about' else c['title']
+    desc = c['caseLead'] if kind=='case' else c['aboutLead'] if kind=='about' else c['intro']
+    css_version = hashlib.sha256((PUBLIC / 'assets/site.css').read_bytes()).hexdigest()[:10]
+    js_version = hashlib.sha256((PUBLIC / 'assets/site.js').read_bytes()).hexdigest()[:10]
     contact = f'<div class="contact"><a href="mailto:{escape(EMAIL)}">{c["contact"]}</a><span>{escape(EMAIL)}</span></div>' if EMAIL else ''
+    links = f'<a href="{home}#services">{c["services"]}</a><a href="{case}" {("aria-current=page" if kind=="case" else "")}>{c["cases"]}</a><a href="{c["aboutPath"]}" {("aria-current=page" if kind=="about" else "")}>{c["about"]}</a>'
     return f'''<!doctype html>
-<html lang="{c['lang']}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{escape(title)} — WeftWorks</title><meta name="description" content="{escape(desc)}"><meta name="theme-color" content="#ffffff"><meta property="og:title" content="{escape(title)} — WeftWorks"><meta property="og:description" content="{escape(desc)}"><meta property="og:type" content="website"><meta property="og:locale" content="{'zh_CN' if zh else 'en_US'}"><meta property="og:image" content="/assets/share-cover.png"><meta name="twitter:card" content="summary_large_image"><link rel="alternate" hreflang="{c['otherlang']}" href="{other}"><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css"><script src="/assets/site.js" defer></script></head>
-<body><a class="skip" href="#main">{c['skip']}</a><header class="header"><div class="container nav"><a class="brand" href="{home}" aria-label="WeftWorks {'首页' if zh else 'home'}">WeftWorks<span class="brand-stitch" aria-hidden="true"></span></a><nav aria-label="{'主导航' if zh else 'Main navigation'}"><a href="{home}#services">{c['services']}</a><a href="{case}" {'aria-current="page"' if kind=='case' else ''}>{c['cases']}</a><a class="nav-about" href="{home}#about">{c['about']}</a><a class="language" href="{other}" lang="{c['otherlang']}" hreflang="{c['otherlang']}" data-language>{c['other']}</a></nav></div></header>
-{body}<footer class="footer container"><div><a class="brand" href="{home}">WeftWorks</a><p>{c['footer']}</p></div><div class="footer-right"><nav aria-label="{'页脚导航' if zh else 'Footer navigation'}"><a href="{home}#approach">{c['approach']}</a><a href="{home}#about">{c['about']}</a></nav>{contact}<p class="copyright">© 2026 WeftWorks</p></div></footer></body></html>'''
+<html lang="{c['lang']}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{escape(title)} — WeftWorks</title><meta name="description" content="{escape(desc)}"><meta name="theme-color" content="#ffffff"><meta property="og:title" content="{escape(title)} — WeftWorks"><meta property="og:description" content="{escape(desc)}"><meta property="og:type" content="website"><meta property="og:locale" content="{'zh_CN' if zh else 'en_US'}"><meta property="og:image" content="/assets/share-cover.png"><meta name="twitter:card" content="summary_large_image"><link rel="alternate" hreflang="{c['otherlang']}" href="{other}"><link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="/assets/site.css?v={css_version}"><script src="/assets/site.js?v={js_version}" defer></script></head>
+<body><a class="skip" href="#main">{c['skip']}</a><header class="header"><div class="container nav"><a class="brand" href="{home}" aria-label="WeftWorks {'首页' if zh else 'home'}">WeftWorks<span class="brand-stitch" aria-hidden="true"></span></a><div class="nav-actions"><nav class="desktop-nav" aria-label="{'主导航' if zh else 'Main navigation'}">{links}</nav><details class="mobile-menu"><summary>{c['menu']}<span class="menu-icon" aria-hidden="true"></span></summary><nav aria-label="{'手机导航' if zh else 'Mobile navigation'}">{links}</nav></details><a class="language" href="{other}" lang="{c['otherlang']}" hreflang="{c['otherlang']}" data-language>{c['other']}</a></div></div></header>
+{body}<footer class="footer container"><div><a class="brand" href="{home}">WeftWorks</a><p>{c['footer']}</p></div><div class="footer-right"><nav aria-label="{'页脚导航' if zh else 'Footer navigation'}"><a href="{home}#approach">{c['approach']}</a><a href="{c['aboutPath']}">{c['about']}</a></nav>{contact}<p class="copyright">© 2026 WeftWorks</p></div></footer></body></html>'''
+
+def localized_write(locale, path, html):
+    write(('zh/' if locale == 'zh' else '') + path, html)
+    if locale == 'en':
+        # Keep earlier /en/ links usable without a JavaScript redirect.
+        write('en/' + path, html)
+
+ICONS = [
+    '<path d="M16 7l-7 4-5 12 7 3 4-7v19h26V19l4 7 7-3-5-12-7-4q-12 8-24 0Z"/>',
+    '<rect x="9" y="8" width="38" height="34" rx="3"/><path d="M9 19h38M18 27h12M18 34h21"/><circle cx="16" cy="14" r="1"/>',
+    '<path d="M8 12h40v31H8ZM8 22h40M8 32h40M22 12v31M35 12v31"/><path d="m25 27 3 3 5-6"/>',
+    '<rect x="10" y="7" width="26" height="36" rx="3"/><path d="M17 16h12M17 23h9M17 30h8"/><circle cx="39" cy="33" r="11"/><path d="m34 33 4 4 7-8"/>'
+]
 
 for locale,c in COPY.items():
-    rows=''.join(f'<article class="service-row"><p class="service-label">{label}</p><div><h3>{q}</h3><p>{answer}</p></div><span class="service-glyph" aria-hidden="true">{glyph}</span></article>' for (label,q,answer),glyph in zip(c['servicesData'],['◇','▤','⊞','◷']))
+    rows=''.join(f'<article class="service-card service-{i}"><div class="service-card-top"><span class="service-icon" aria-hidden="true"><svg viewBox="0 0 56 50" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round">{ICONS[i]}</svg></span><p class="service-label">{label}</p></div><h3>{q}</h3><p class="service-answer">{answer}</p><p class="service-outcome">{c["deliverables"][i]}</p></article>' for i,(label,q,answer) in enumerate(c['servicesData']))
     board=f'''<figure class="workboard"><div class="board-top"><span>{c['board']}</span><span class="board-code">WW / KNIT</span></div><div class="board-base">{image('base',c['base'],False)}<span class="color-label"><i class="swatch sage"></i>{c['base']}</span></div><div class="board-options"><div>{image('oat',c['oat'],False)}<span class="color-label"><i class="swatch oat"></i>{c['oat']}</span></div><div>{image('navy',c['navy'],False)}<span class="color-label"><i class="swatch navy"></i>{c['navy']}</span></div></div><figcaption>{c['keep']}<small>{c['note']}</small></figcaption></figure>'''
     main=f'''<main id="main"><section class="hero container"><div class="hero-copy"><p class="eyebrow">{c['studio']}</p><h1>{c['heading']}</h1><p class="hero-intro">{c['intro']}</p><div class="hero-actions"><a class="button" href="{c['case']}">{c['cta']}</a><a class="text-link" href="#services">{c['secondary']}</a></div></div>{board}</section>
-<section id="services" class="services container"><div class="section-heading"><div><p class="eyebrow">{c['services']}</p><h2>{c['serviceTitle']}</h2></div><p>{c['serviceIntro']}</p></div><div class="service-rows">{rows}</div><p class="section-note">{c['example']}</p></section>
+<section id="services" class="services container"><div class="section-heading"><div><p class="eyebrow">{c['services']}</p><h2>{c['serviceTitle']}</h2></div><p>{c['serviceIntro']}</p></div><div class="service-grid">{rows}</div><p class="section-note">{c['example']}</p></section>
 <section class="container case-section"><a class="case-card" href="{c['case']}"><div class="case-copy"><p class="eyebrow">{c['badge']}</p><h2>{c['caseTitle']}</h2><p>{c['caseIntro']}</p><span class="text-link">{c['caseLink']}</span></div><div class="case-art" aria-hidden="true"><div>{image('oat','')}<span>{c['oat']}</span></div><div>{image('navy','')}<span>{c['navy']}</span></div></div></a></section>
 <section id="approach" class="approach container"><div><p class="eyebrow">{c['approach']}</p><h2>{c['approachTitle']}</h2></div><div><p class="large-copy">{c['approachText']}</p><ul class="phases">{''.join(f'<li>{p}</li>' for p in c['phases'])}</ul></div></section>
-<section id="about" class="about"><div class="container about-inner"><div class="weave" aria-hidden="true"></div><div><p class="eyebrow">Weft / {'纬线' if locale=='zh' else 'The crosswise thread'}</p><h2>{c['aboutTitle']}</h2><p>{c['aboutText']}</p></div></div></section></main>'''
-    write('index.html' if locale=='zh' else 'en/index.html',shell(c,'home',main))
+<section id="about" class="about"><div class="container about-inner"><div class="weave" aria-hidden="true"></div><div><p class="eyebrow">Weft / {'纬线' if locale=='zh' else 'The crosswise thread'}</p><h2>{c['aboutTitle']}</h2><p>{c['aboutText']}</p><a class="text-link about-more" href="{c['aboutPath']}">{c['aboutMore']}</a></div></div></section></main>'''
+    localized_write(locale,'index.html',shell(c,'home',main))
     def step(n,title,text,content):
         return f'<section class="step" id="step-{n}"><div class="step-heading"><span class="step-number">0{n}</span><div><h2>{title}</h2><p>{text}</p></div></div>{content}</section>'
     s1=f'''<div class="request-layout"><figure class="sample"><div>{image('base',c['base'])}</div><figcaption>{c['base']}<small>{c['note']}</small></figcaption></figure><blockquote><p class="eyebrow">{c['messageLabel']}</p><p>{c['quote']}</p></blockquote></div>'''
@@ -85,7 +149,15 @@ for locale,c in COPY.items():
     s3=f'''<div class="candidates">{''.join(f'<figure><div class="candidate-heading"><span>{c[key]}</span><span class="color-label"><i class="swatch {name}"></i>{c[name]}</span></div>{image(name,c[key]+" · "+c[name])}<figcaption>{c["note"]}</figcaption></figure>' for key,name in [('a','oat'),('b','navy')])}</div>'''
     s4=f'''<div class="review-roles"><div><h3>{c['designer']}</h3><p>{c['designerText']}</p></div><div><h3>{c['sales']}</h3><p>{c['salesText']}</p></div></div><p class="caution">{c['caution']}</p>'''
     main=f'''<main id="main" class="case-main container"><div class="case-intro"><a class="breadcrumb" href="{c['home']}">{c['back']}</a><p class="eyebrow case-badge">{c['badge']}</p><h1>{c['caseH1']}</h1><p class="case-lead">{c['caseLead']}</p><button class="copy-link" type="button" data-copy data-success="{c['copied']}" data-failure="{c['copyFail']}" hidden>{c['copy']}</button><p class="copy-status" role="status" aria-live="polite"></p></div>{step(1,c['step1'],c['step1text'],s1)}{step(2,c['step2'],c['step2text'],s2)}{step(3,c['step3'],c['step3text'],s3)}{step(4,c['step4'],c['step4text'],s4)}<div class="case-end"><p>{c['boundary']}</p><a class="button" href="{c['home']}#services">{c['returnServices']}</a></div></main>'''
-    write(('' if locale=='zh' else 'en/')+'cases/shengxuerong/index.html',shell(c,'case',main))
+    localized_write(locale,'cases/shengxuerong/index.html',shell(c,'case',main))
+    principles = ''.join(f'<article class="about-principle"><h3>{title}</h3><p>{text}</p></article>' for title,text in c['principles'])
+    fde_steps = ''.join(f'<article class="fde-step"><span class="thread-line" aria-hidden="true"></span><h3>{title}</h3><p>{text}</p></article>' for title,text in c['fdeSteps'])
+    about_body = f'''<main id="main" class="about-page"><section class="about-hero container"><div><p class="eyebrow">{c['aboutPageTitle']}</p><h1>{c['aboutH1']}</h1><p class="about-lead">{c['aboutLead']}</p></div><div class="about-thread" aria-hidden="true"><div class="thread-art"></div><span>WEFT / WORKS</span></div></section>
+<section class="studio-story container"><div><p class="eyebrow">Weft / {'纬线' if locale=='zh' else 'The crosswise thread'}</p><h2>{c['aboutTitle']}</h2></div><p class="large-copy">{c['aboutText']}</p></section>
+<section class="about-principles container"><h2>{c['principleTitle']}</h2><div>{principles}</div></section>
+<section class="container" id="contact"><div class="contact-panel about-panel"><div><p class="eyebrow">{c['conversation']}</p><h2>{c['contactTitle']}</h2><p>{c['contactText']}</p></div><div class="phone-block"><span>{c['phoneLabel']}</span><a class="phone-number" href="tel:{escape(PHONE_URI)}">{escape(PHONE)}</a></div></div></section>
+<section id="fde" class="fde-section"><div class="container"><div class="fde-heading"><div><p class="eyebrow">{c['fdeLabel']}</p><h2>{c['fdeTitle']}</h2></div><p>{c['fdeText']}</p></div><div class="fde-steps">{fde_steps}</div></div></section></main>'''
+    localized_write(locale, 'about/index.html', shell(c, 'about', about_body))
     err=f'<main id="main" class="container error"><p class="eyebrow">404</p><h1>{c["notfound"]}</h1><p>{c["notfoundText"]}</p><a class="button" href="{c["home"]}">{c["homeLink"]}</a></main>'
-    write(('' if locale=='zh' else 'en/')+'404.html',shell(c,'404',err).replace(f'<title>{escape(c["title"])} — WeftWorks</title>', '<title>404 — WeftWorks</title>').replace('<meta name="theme-color"', '<meta name="robots" content="noindex"><meta name="theme-color"'))
-print('Built 6 localized HTML pages and original SVG assets.')
+    localized_write(locale,'404.html',shell(c,'404',err).replace(f'<title>{escape(c["title"])} — WeftWorks</title>', '<title>404 — WeftWorks</title>').replace('<meta name="theme-color"', '<meta name="robots" content="noindex"><meta name="theme-color"'))
+print('Built English-default site, Chinese pages, and compatible /en/ aliases.')

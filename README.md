@@ -1,6 +1,6 @@
 # WeftWorks
 
-面向服装企业的中英文静态官网。包括首页、款式预览方案、两种语言的错误页，以及原创针织衫 SVG 图稿。没有前端框架、外部字体、分析脚本或运行时依赖。
+面向服装企业的中英文静态官网。默认英文，包括首页、独立 About 页面、款式预览方案、两种语言的错误页，以及原创针织衫 SVG 图稿。没有前端框架、外部字体、分析脚本或运行时依赖。
 
 ## 本地启动
 
@@ -12,19 +12,20 @@ python3 -m http.server 8000 --directory public
 
 | 页面 | 中文 | English |
 | --- | --- | --- |
-| 首页 | `/` | `/en/` |
-| 圣雪绒方案 | `/cases/shengxuerong/` | `/en/cases/shengxuerong/` |
-| 错误页 | `/404.html` | `/en/404.html` |
+| 首页 | `/zh/` | `/` |
+| About | `/zh/about/` | `/about/` |
+| 圣雪绒方案 | `/zh/cases/shengxuerong/` | `/cases/shengxuerong/` |
+| 错误页 | `/zh/404.html` | `/404.html` |
 
-导航右侧可切换语言；案例切换后仍停留在案例页。首页切换语言时保留服务、合作方式或关于段落的锚点。默认入口是中文，英文网址可独立分享。语言选择体现在 URL 中，不自动重定向、不写入 Cookie。所有正文和导航在禁用 JavaScript 时也可使用；复制链接是渐进增强功能。
+导航右侧可切换语言；案例切换后仍停留在案例页。首页切换语言时保留服务、合作方式或关于段落的锚点。默认入口是英文，中文网址可独立分享。旧的 `/en/`、`/en/about/` 和 `/en/cases/shengxuerong/` 仍提供英文页面，保留此前分享链接的可用性。语言选择体现在 URL 中，不自动重定向、不写入 Cookie。所有正文和导航在禁用 JavaScript 时也可使用；复制链接是渐进增强功能。
 
 ## 文件与更新
 
 - `public/`：完整可部署目录，包含生成后的 HTML 与本地静态资源。
-- `scripts/build.py`：两种语言的正文、页面模板与原创 SVG 图稿，使用 Python 标准库。
-- `public/assets/site.css`：共用响应式样式；768px 以下采用单列。
-- `public/assets/site.js`：复制链接与语言切换时保留锚点。
-- `site.config.json`：联系邮箱开关。
+- `scripts/build.py`：两种语言的正文、页面模板、内容版本化的 CSS/JS 链接与原创 SVG 图稿，使用 Python 标准库。
+- `public/assets/site.css`：共用响应式样式；服务卡片在桌面采用四列、中屏两列、手机单列。手机端使用原生可展开菜单。
+- `public/assets/site.js`：复制链接、语言切换时保留锚点、手机菜单与一次性入场动效。支持系统减少动态效果偏好，内容不会因 JavaScript 不可用而隐藏。
+- `site.config.json`：电话与联系邮箱开关。
 - `scripts/check.py`：验证页面结构、站内链接、锚点、资源和必要的事实边界。
 - `public/assets/share-cover.png`：1200 × 630 分享封面；同目录 SVG 为可编辑源图。
 
@@ -39,7 +40,7 @@ python3 scripts/check.py
 
 ## 联系资料
 
-未提供已验证邮箱时，不显示任何联系入口。取得真实业务邮箱并验证后，编辑 `site.config.json`：将 `contact_email` 设为该邮箱，将 `contact_email_verified` 设为 `true`，然后运行生成器并提交输出。两种语言的页脚都会显示可复制地址和邮件草稿入口。不要使用开发者个人邮箱作为占位内容。
+About 页面显示委托方提供的电话 `18901647505`，可通过 `tel:+8618901647505` 拨号。可在 `site.config.json` 的 `contact_phone` 和 `contact_phone_uri` 中更新。未提供已验证邮箱时，不显示邮件入口。取得真实业务邮箱并验证后，编辑 `site.config.json`：将 `contact_email` 设为该邮箱，将 `contact_email_verified` 设为 `true`，然后运行生成器并提交输出。两种语言的页脚都会显示可复制地址和邮件草稿入口。不要使用开发者个人邮箱作为占位内容。
 
 ## GitHub 与 Cloudflare Pages
 
@@ -72,8 +73,12 @@ Cloudflare 使用根目录 `404.html` 返回错误状态；英文专用错误页
 - 案例复制按钮显示成功反馈；若浏览器拒绝剪贴板权限，应提示从地址栏复制。
 - 各页面包含一个 H1、独立标题和摘要、正确的语言属性；Tab 焦点可见。
 - 未验证邮箱时不出现 `mailto:`；图注与“方案示意”保留。
-- 部署后用未登录窗口及手机打开四个主要路径，并从目标客户常用网络检查图片。此项不能用本地预览替代。
+- 部署后用未登录窗口及手机打开两种语言的首页、About 和案例路径，并从目标客户常用网络检查图片。此项不能用本地预览替代。
 
 ## 内容边界
 
 圣雪绒页面是拟议方案，展示预先制作的原创示意图。没有客户 Logo、实际样衣、员工引语、节省工时或已上线结果，也没有上传、生成、发送功能。Agent 被描述为拟议流程的一部分，最终由设计师和业务员复核。
+
+## FDE 合作方式
+
+About 页末以 Forward Deployed Engineer（前线部署工程师）解释合作思路：贴近业务团队，理解一项真实工作，共同开发小版本，再接入系统并迭代。它描述我们的合作方法，不代表已完成的客户项目或业绩承诺。术语参考：[Palantir 官方职位说明](https://jobs.lever.co/palantir/5168e8fd-fec1-4fea-b7a1-81bdaea65850)。

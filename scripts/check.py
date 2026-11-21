@@ -25,10 +25,10 @@ class Page(HTMLParser):
         if tag=='meta' and a.get('property')=='og:image': self.refs.append(a['content'])
 
 pages={p.resolve():Page(p) for p in PUBLIC.rglob('*.html')}
-assert len(pages)==6
+assert len(pages)==12
 for path,page in pages.items():
     assert page.h1==1 and page.title and page.desc,(path,'Headings/metadata')
-    assert page.lang==('en' if 'en' in path.relative_to(PUBLIC).parts else 'zh-CN'),path
+    assert page.lang==('zh-CN' if 'zh' in path.relative_to(PUBLIC).parts else 'en'),path
     for ref in page.refs:
         url=urlsplit(ref)
         if url.scheme or url.netloc: continue
@@ -40,7 +40,19 @@ for path,page in pages.items():
     html=path.read_text()
     config=json.loads((ROOT/'site.config.json').read_text())
     if not config['contact_email'] or not config['contact_email_verified']: assert 'mailto:' not in html,path
+    if 'about' in path.parts:
+        assert 'tel:+8618901647505' in html and '18901647505' in html,path
+        assert 'Forward Deployed Engineer' in html,path
+        assert ('/about/' if page.lang=='zh-CN' else '/zh/about/') in page.refs,path
     if 'cases' in path.parts:
         assert ('方案示意' if page.lang=='zh-CN' else 'Proposed workflow') in html
         assert ('非客户样衣' if page.lang=='zh-CN' else 'not a client sample') in html
 print(f'PASS: {len(pages)} pages; languages, H1, metadata, local links, anchors, images, contact visibility, and case labels.')
+
+assert pages[(PUBLIC/'index.html').resolve()].lang == 'en'
+assert pages[(PUBLIC/'zh/index.html').resolve()].lang == 'zh-CN'
+for prefix in ['', 'zh/', 'en/']:
+    home = pages[(PUBLIC/prefix/'index.html').resolve()]
+    assert ('/zh/about/' if prefix=='zh/' else '/about/') in home.refs
+    assert ('/zh/cases/shengxuerong/' if prefix=='zh/' else '/cases/shengxuerong/') in home.refs
+print('PASS: English default, About routes, language counterparts, public phone, and FDE content.')
