@@ -13,3 +13,17 @@
 
 /* Public email and a clearly marked proposed WeChat ID. */
 .contact-methods{border-left:1px solid #c6d6e3;padding-left:32px;display:grid;gap:22px;min-width:0}.contact-method>span{display:block;font-size:.875rem;color:var(--muted);margin-bottom:5px}.contact-panel .contact-value{color:var(--blue);font-size:1.45rem;letter-spacing:-.025em;font-weight:550;line-height:1.5;overflow-wrap:anywhere}.contact-method a:hover{text-decoration:underline;text-underline-offset:6px}.contact-panel .wechat-id{color:var(--ink);user-select:all}.contact-method small{display:block;color:var(--muted);font-size:.875rem;line-height:1.7;margin-top:5px}.contact-method+.contact-method{border-top:1px solid #d1dfe8;padding-top:17px}@media(max-width:767px){.contact-methods{border-left:0;border-top:1px solid #c6d6e3;padding:21px 0 0}.contact-panel .contact-value{font-size:1.4rem}}
+
+/* Renderings and photographed knit swatches from the same sample sheet. */
+.knit-board .board-top { margin-bottom: 12px; }
+.knit-board img, .knit-sheet img, .knit-texture { display: block; width: 100%; height: auto; }
+.knit-board img, .knit-texture { border-radius: 3px; }
+.knit-board a, .knit-sheet > a { display: block; }
+.knit-sheet { margin: 0; border: 1px solid var(--line); border-radius: 5px; }
+.knit-sheet > a { cursor: zoom-in; }
+.knit-sheet figcaption { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; padding: 14px 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: .9375rem; }
+.knit-reading { padding: clamp(32px, 5vw, 64px) 0; }
+.knit-reading > div { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 42px; margin-top: 22px; }
+.knit-reading h3 { margin-bottom: 8px; }
+.knit-reading p { color: var(--muted); }
+@media (max-width: 640px) { .knit-reading > div { grid-template-columns: 1fr; } }

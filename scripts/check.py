@@ -49,8 +49,9 @@ for path,page in pages.items():
         assert 'Forward Deployed Engineer' in html,path
         assert ('/about/' if page.lang=='zh-CN' else '/zh/about/') in page.refs,path
     if 'cases' in path.parts:
-        assert ('方案示意' if page.lang=='zh-CN' else 'Proposed workflow') in html
-        assert ('非客户样衣' if page.lang=='zh-CN' else 'not a client sample') in html
+        assert '/assets/polo-pattern-sheet.webp' in page.refs,path
+        assert ('实物针织小样' if page.lang=='zh-CN' else 'knitted swatches') in html,path
+        assert not any(ref.startswith('/assets/knit-') for ref in page.refs),path
 print(f'PASS: {len(pages)} pages; languages, H1, metadata, local links, anchors, images, contact visibility, and case labels.')
 
 assert pages[(PUBLIC/'index.html').resolve()].lang == 'en'
